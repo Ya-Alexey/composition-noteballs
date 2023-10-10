@@ -22,44 +22,30 @@
       </div>
     </div>
 
-    <BaseNotes v-for="note in notes" :key="note.id"
+    <BaseNotes v-for="note in storeNotes.notes" :key="note.id"
       :note="note"
-      @removeNote="handleRemove"
     />
   </div>
 </template>
 
 <script setup>
   import BaseNotes from '@/components/BaseNotes.vue';
+  import { useNotesStore } from '@/stores/notes';
   import { ref } from 'vue';
 
   const newNote = ref(''),
         newNoteRef = ref(null),
-        notes = ref([
-          {
-            id: 1,
-            content: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quisquam praesentium officiis optio dignissimos porro, maiores corporis voluptatibus repellendus asperiores consequatur aperiam exercitationem nobis sapiente perferendis sunt sit, enim sed vitae?',
-          },
-          {
-            id: 2,
-            content: '222 Lorem ipsum dolor sit...',
-          }
-        ]);
+        storeNotes = useNotesStore();
 
   function addNote() {
-    const currentDate = new Date().getTime();
+    const currentDate = new Date().getTime(),
+          note = {
+            id: currentDate,
+            content: newNote.value,
+          };
 
-    const note = {
-      id: currentDate,
-      content: newNote.value,
-    }
-
-    notes.value.unshift(note);
+    storeNotes.addNote(note);
     newNote.value = '';
     newNoteRef.value.focus();
-  }
-
-  function handleRemove(id) {
-    notes.value = notes.value.filter(note => note.id != id);
   }
 </script>
