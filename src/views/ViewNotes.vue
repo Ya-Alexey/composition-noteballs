@@ -1,26 +1,18 @@
 <template>
   <div class="notes">
-    <div class="card has-background-success-dark p-4 mb-5">
-      <div class="field">
-        <div class="control">
-          <textarea class="textarea" placeholder="Add a new note"
-            v-model="newNote"
-            ref="newNoteRef"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="field is-grouped is-grouped-right">
-        <div class="control">
-          <button class="button is-link has-background-success"
-            :disabled="!newNote"
-            @click="addNote"
-            >
-            Add New Note
-          </button>
-        </div>
-      </div>
-    </div>
+    <NoteForm v-model="newNote"
+      ref="noteForm"
+      label="Your note text"
+      >
+      <template v-slot:buttons>
+        <button class="button is-link has-background-success"
+          :disabled="!newNote"
+          @click="addNote"
+          >
+          Add New Note
+        </button>
+      </template>
+    </NoteForm>
 
     <BaseNotes v-for="note in storeNotes.notes" :key="note.id"
       :note="note"
@@ -30,11 +22,12 @@
 
 <script setup>
   import BaseNotes from '@/components/BaseNotes.vue';
+  import NoteForm from '@/components/NoteForm.vue';
   import { useNotesStore } from '@/stores/notes';
   import { ref } from 'vue';
 
   const newNote = ref(''),
-        newNoteRef = ref(null),
+        noteForm = ref(null),
         storeNotes = useNotesStore();
 
   function addNote() {
@@ -46,6 +39,7 @@
 
     storeNotes.addNote(note);
     newNote.value = '';
-    newNoteRef.value.focus();
+
+    noteForm.value.textareaFocus();
   }
 </script>
