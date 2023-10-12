@@ -18,10 +18,16 @@
         </tr>
       </tbody>
     </table>
+    <input class="input" 
+      type="text" 
+      placeholder="Text...."
+      v-autofocus
+    >
   </div>
 </template>
 
 <script setup>
+  import { vAutofocus } from '@/directives/vAutofocus';
   import { useNotesStore } from '@/stores/notes';
 
   const { totalNotesCount, totalNotesCharCount } = useNotesStore();

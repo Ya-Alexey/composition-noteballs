@@ -1,7 +1,6 @@
 <template>
   <div class="notes">
     <NoteForm v-model="newNote"
-      ref="noteForm"
       label="Your note text"
       >
       <template v-slot:buttons>
@@ -25,9 +24,9 @@
   import NoteForm from '@/components/NoteForm.vue';
   import { useNotesStore } from '@/stores/notes';
   import { ref } from 'vue';
+  import { useWatchChar } from '@/use/useWatchChar';
 
   const newNote = ref(''),
-        noteForm = ref(null),
         storeNotes = useNotesStore();
 
   function addNote() {
@@ -39,7 +38,7 @@
 
     storeNotes.addNote(note);
     newNote.value = '';
-
-    noteForm.value.textareaFocus();
   }
+  useWatchChar(newNote);
+
 </script>
