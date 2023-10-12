@@ -14,6 +14,7 @@
         </RouterLink>
         <button class="button is-link has-background-link"
           :disabled="!noteContent"
+          @click="handleSave"
           >
           Save Note
         </button>
@@ -26,12 +27,21 @@
   import NoteForm from '@/components/NoteForm.vue';
   import { useNotesStore } from '@/stores/notes';
   import { ref } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
 
   const noteContent = ref(''),
         storeNotes = useNotesStore(),
-        route = useRoute();
+        router = useRouter(),
+        noteId = useRoute().params.id;
 
-  noteContent.value = storeNotes.getNoteContent(route.params.id);
+  function handleSave() {
+    storeNotes.updateNote({
+      id: noteId,
+      content: noteContent.value,
+    });
+    router.push({ name: 'home' })
+  }
+
+  noteContent.value = storeNotes.getNoteContent(noteId);
 
 </script>
